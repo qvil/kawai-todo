@@ -12,6 +12,7 @@ import {
 import { AppLoading } from "expo";
 import uuidv1 from "uuid/v1";
 import Todo from "./Todo";
+import { PRIMARY_COLOR, GREY_COLOR } from "./constants";
 
 const { height, width } = Dimensions.get("window");
 
@@ -57,12 +58,24 @@ export default class App extends React.Component {
     }
   };
 
+  _deleteTodo = id => {
+    this.setState(prevState => {
+      const todos = prevState.todos;
+      delete todos[id];
+      const newState = {
+        ...prevState,
+        ...todos
+      };
+      return { ...newState };
+    });
+  };
+
   componentDidMount() {
     this._loadTodos();
   }
 
   render() {
-    const { _handleNewTodo, _addTodo } = this;
+    const { _handleNewTodo, _addTodo, _deleteTodo } = this;
     const { newTodo, loadedTodos, todos } = this.state;
 
     console.log(todos);
@@ -86,7 +99,9 @@ export default class App extends React.Component {
             onSubmitEditing={_addTodo}
           />
           <ScrollView contentContainerStyle={styles.todos}>
-            {Object.values(todos).map(todo => <Todo key={todo.id} {...todo} />)}
+            {Object.values(todos).map(todo => (
+              <Todo key={todo.id} {...todo} deleteTodo={_deleteTodo} />
+            ))}
           </ScrollView>
         </View>
       </View>
@@ -131,7 +146,7 @@ const styles = StyleSheet.create({
   },
   input: {
     padding: 20,
-    borderBottomColor: "#bbb",
+    borderBottomColor: GREY_COLOR,
     // borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomWidth: 1,
     fontSize: 25

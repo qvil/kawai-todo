@@ -10,14 +10,15 @@ import {
 } from "react-native";
 import Swipeable from "react-native-swipeable";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { PRIMARY_COLOR } from "./constants";
+import PropTypes from "prop-types";
+import { PRIMARY_COLOR, GREY_COLOR } from "./constants";
 
 const { width, height } = Dimensions.get("window");
 
 const styles = StyleSheet.create({
   container: {
     width: width - 50,
-    borderBottomColor: "#bbb",
+    borderBottomColor: GREY_COLOR,
     borderBottomWidth: StyleSheet.hairlineWidth,
     flexDirection: "row",
     alignItems: "center"
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     marginVertical: 20
   },
   completedText: {
-    color: "#bbb",
+    color: GREY_COLOR,
     textDecorationLine: "line-through"
   },
   uncompletedText: {
@@ -45,16 +46,21 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   completedCircle: {
-    backgroundColor: PRIMARY_COLOR
+    borderColor: GREY_COLOR
   },
-  uncompletedCirecle: {
+  uncompletedCircle: {
+    borderColor: PRIMARY_COLOR
+  },
+  completedInsideCircle: {
+    backgroundColor: GREY_COLOR
+  },
+  uncompletedInsideCircle: {
     backgroundColor: "#fff"
   },
   insideCircle: {
     width: 20,
     height: 20,
-    borderRadius: 10,
-    backgroundColor: PRIMARY_COLOR
+    borderRadius: 10
   },
   swipeButtons: {
     flex: 1,
@@ -67,28 +73,21 @@ const styles = StyleSheet.create({
     paddingLeft: 20
   },
   input: {
-    marginVertical: 20,
+    // marginVertical: 20,
     width: width / 2
   }
 });
 
-const rightButtons = [
-  <TouchableOpacity style={styles.swipeButtons}>
-    {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
-    <MaterialIcons
-      style={styles.deleteButton}
-      name="delete"
-      size={32}
-      color="white"
-    />
-    {/* <Text style={styles.deleteButton}>Delete</Text> */}
-  </TouchableOpacity>
-];
-
 export default class Todo extends React.Component {
+  static propTypes = {
+    text: PropTypes.string.isRequired,
+    isCompleted: PropTypes.bool.isRequired,
+    deleteTodo: PropTypes.func.isRequired,
+    id: PropTypes.string.isRequired
+  };
+
   state = {
     isEditing: false,
-    isCompleted: false,
     todoValue: ""
   };
 
@@ -121,19 +120,39 @@ export default class Todo extends React.Component {
       _finishEditing
     } = this;
     const { isEditing, isCompleted, todoValue } = this.state;
-    const { text } = this.props;
+    const { text, id, deleteTodo } = this.props;
+    const rightButtons = [
+      <TouchableOpacity
+        style={styles.swipeButtons}
+        onPressOut={() => deleteTodo(id)}
+      >
+        {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
+        <MaterialIcons
+          style={styles.deleteButton}
+          name="delete"
+          size={32}
+          color="white"
+        />
+        {/* <Text style={styles.deleteButton}>Delete</Text> */}
+      </TouchableOpacity>
+    ];
 
     return (
       <Swipeable rightButtons={rightButtons}>
         <View style={styles.container}>
           <TouchableOpacity onPress={_toggleComplete}>
-            <View style={styles.circle}>
+            <View
+              style={[
+                styles.circle,
+                isCompleted ? styles.completedCircle : styles.uncompletedCircle
+              ]}
+            >
               <View
                 style={[
                   styles.insideCircle,
                   isCompleted
-                    ? styles.completedCircle
-                    : styles.uncompletedCirecle
+                    ? styles.completedInsideCircle
+                    : styles.uncompletedInsideCircle
                 ]}
               />
             </View>
