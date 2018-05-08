@@ -9,22 +9,66 @@ import {
   Platform,
   ScrollView
 } from "react-native";
+import { AppLoading } from "expo";
+import uuidv1 from "uuid/v1";
 import Todo from "./Todo";
 
 const { height, width } = Dimensions.get("window");
 
 export default class App extends React.Component {
   state = {
-    newTodo: ""
+    newTodo: "",
+    loadedTodos: false,
+    todos: {}
   };
 
   _handleNewTodo = text => {
     this.setState({ newTodo: text });
   };
 
-  render() {
-    const { _handleNewTodo } = this;
+  _loadTodos = () => {
+    this.setState({ loadedTodos: true });
+  };
+
+  _addTodo = () => {
     const { newTodo } = this.state;
+
+    if (newTodo !== "") {
+      this.setState(prevState => {
+        const id = uuidv1();
+        const newTodoObj = {
+          [id]: {
+            id,
+            isCompleted: false,
+            text: newTodo
+          }
+        };
+        const newState = {
+          ...prevState,
+          todos: {
+            ...prevState.todos,
+            ...newTodoObj
+          },
+          newTodo: ""
+        };
+        return { ...newState };
+      });
+    } else {
+    }
+  };
+
+  componentDidMount() {
+    this._loadTodos();
+  }
+
+  render() {
+    const { _handleNewTodo, _addTodo } = this;
+    const { newTodo, loadedTodos, todos } = this.state;
+
+    console.log(todos);
+    if (!loadedTodos) {
+      return <AppLoading />;
+    }
 
     return (
       <View style={styles.container}>
@@ -39,9 +83,10 @@ export default class App extends React.Component {
             placeholderTextColor={"#999"}
             returnKeyType={"done"}
             autoCorrect={false}
+            onSubmitEditing={_addTodo}
           />
           <ScrollView contentContainerStyle={styles.todos}>
-            <Todo text="Tododododo" />
+            {Object.values(todos).map(todo => <Todo key={todo.id} {...todo} />)}
           </ScrollView>
         </View>
       </View>
