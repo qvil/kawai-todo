@@ -90,8 +90,30 @@ export default class App extends React.Component {
     });
   };
 
+  _updateTodo = (id, text) => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        todos: {
+          ...prevState.todos,
+          [id]: {
+            ...prevState.todos[id],
+            text
+          }
+        }
+      };
+      return { ...newState };
+    });
+  };
+
   render() {
-    const { _handleNewTodo, _addTodo, _deleteTodo, _toggleCompleteTodo } = this;
+    const {
+      _handleNewTodo,
+      _addTodo,
+      _deleteTodo,
+      _toggleCompleteTodo,
+      _updateTodo
+    } = this;
     const { newTodo, loadedTodos, todos } = this.state;
 
     console.log(todos);
@@ -121,6 +143,7 @@ export default class App extends React.Component {
                 {...todo}
                 deleteTodo={_deleteTodo}
                 toggleCompleteTodo={_toggleCompleteTodo}
+                updateTodo={_updateTodo}
               />
             ))}
           </ScrollView>
