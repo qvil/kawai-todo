@@ -83,7 +83,8 @@ export default class Todo extends React.Component {
     text: PropTypes.string.isRequired,
     isCompleted: PropTypes.bool.isRequired,
     deleteTodo: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired
+    id: PropTypes.string.isRequired,
+    toggleCompleteTodo: PropTypes.func.isRequired
   };
 
   state = {
@@ -92,11 +93,9 @@ export default class Todo extends React.Component {
   };
 
   _toggleComplete = () => {
-    this.setState(prevState => {
-      return {
-        isCompleted: !prevState.isCompleted
-      };
-    });
+    const { id, isCompleted, toggleCompleteTodo } = this.props;
+
+    toggleCompleteTodo(!isCompleted)(id);
   };
 
   _startEditing = () => {
@@ -119,21 +118,19 @@ export default class Todo extends React.Component {
       _startEditing,
       _finishEditing
     } = this;
-    const { isEditing, isCompleted, todoValue } = this.state;
-    const { text, id, deleteTodo } = this.props;
+    const { isEditing, todoValue } = this.state;
+    const { text, id, deleteTodo, isCompleted } = this.props;
     const rightButtons = [
       <TouchableOpacity
         style={styles.swipeButtons}
         onPressOut={() => deleteTodo(id)}
       >
-        {/* <Ionicons name="md-checkmark-circle" size={32} color="green" /> */}
         <MaterialIcons
           style={styles.deleteButton}
           name="delete"
           size={32}
           color="white"
         />
-        {/* <Text style={styles.deleteButton}>Delete</Text> */}
       </TouchableOpacity>
     ];
 

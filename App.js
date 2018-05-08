@@ -23,6 +23,10 @@ export default class App extends React.Component {
     todos: {}
   };
 
+  componentDidMount() {
+    this._loadTodos();
+  }
+
   _handleNewTodo = text => {
     this.setState({ newTodo: text });
   };
@@ -70,12 +74,24 @@ export default class App extends React.Component {
     });
   };
 
-  componentDidMount() {
-    this._loadTodos();
-  }
+  _toggleCompleteTodo = complete => id => {
+    this.setState(prevState => {
+      const newState = {
+        ...prevState,
+        todos: {
+          ...prevState.todos,
+          [id]: {
+            ...prevState.todos[id],
+            isCompleted: complete
+          }
+        }
+      };
+      return { ...newState };
+    });
+  };
 
   render() {
-    const { _handleNewTodo, _addTodo, _deleteTodo } = this;
+    const { _handleNewTodo, _addTodo, _deleteTodo, _toggleCompleteTodo } = this;
     const { newTodo, loadedTodos, todos } = this.state;
 
     console.log(todos);
@@ -100,7 +116,12 @@ export default class App extends React.Component {
           />
           <ScrollView contentContainerStyle={styles.todos}>
             {Object.values(todos).map(todo => (
-              <Todo key={todo.id} {...todo} deleteTodo={_deleteTodo} />
+              <Todo
+                key={todo.id}
+                {...todo}
+                deleteTodo={_deleteTodo}
+                toggleCompleteTodo={_toggleCompleteTodo}
+              />
             ))}
           </ScrollView>
         </View>
