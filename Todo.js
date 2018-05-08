@@ -30,12 +30,14 @@ export default class Todo extends React.Component {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={_toggleComplete}>
-          <View
-            style={[
-              styles.circle,
-              isCompleted ? styles.completedCircle : styles.uncompletedCirecle
-            ]}
-          />
+          <View style={styles.circle}>
+            <View
+              style={[
+                styles.insideCircle,
+                isCompleted ? styles.completedCircle : styles.uncompletedCirecle
+              ]}
+            />
+          </View>
         </TouchableOpacity>
         <Text style={styles.text}>Todo</Text>
       </View>
@@ -60,15 +62,23 @@ const styles = StyleSheet.create({
     width: 30,
     height: 30,
     borderRadius: 15,
-    borderColor: "red",
+    borderColor: "#f23657",
     borderWidth: 3,
     // backgroundColor: "red",
-    marginRight: 20
+    marginRight: 20,
+    justifyContent: "center",
+    alignItems: "center"
   },
   completedCircle: {
-    borderColor: "#bbb"
+    backgroundColor: "#fff"
   },
   uncompletedCirecle: {
-    borderColor: "#f23657"
+    backgroundColor: "#f23657"
+  },
+  insideCircle: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    backgroundColor: "#f23657"
   }
 });

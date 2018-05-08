@@ -19,7 +19,6 @@ export default class App extends React.Component {
   };
 
   _handleNewTodo = text => {
-    console.warn(text);
     this.setState({ newTodo: text });
   };
 
