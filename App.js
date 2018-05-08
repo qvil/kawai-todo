@@ -6,19 +6,44 @@ import {
   StatusBar,
   TextInput,
   Dimensions,
-  Platform
+  Platform,
+  ScrollView
 } from "react-native";
+import Todo from "./Todo";
 
 const { height, width } = Dimensions.get("window");
 
 export default class App extends React.Component {
+  state = {
+    newTodo: ""
+  };
+
+  _handleNewTodo = text => {
+    console.warn(text);
+    this.setState({ newTodo: text });
+  };
+
   render() {
+    const { _handleNewTodo } = this;
+    const { newTodo } = this.state;
+
     return (
       <View style={styles.container}>
         <StatusBar barStyle="light-content" />
         <Text style={styles.title}>Kawai Todo</Text>
         <View style={styles.card}>
-          <TextInput style={styles.input} placeholder={"New To Do"} />
+          <TextInput
+            style={styles.input}
+            placeholder={"New To Do"}
+            value={newTodo}
+            onChangeText={_handleNewTodo}
+            placeholderTextColor={"#999"}
+            returnKeyType={"done"}
+            autoCorrect={false}
+          />
+          <ScrollView contentContainerStyle={styles.todos}>
+            <Todo />
+          </ScrollView>
         </View>
       </View>
     );
@@ -59,5 +84,15 @@ const styles = StyleSheet.create({
         elevation: 3
       }
     })
+  },
+  input: {
+    padding: 20,
+    borderBottomColor: "#bbb",
+    // borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomWidth: 1,
+    fontSize: 25
+  },
+  todos: {
+    alignItems: "center"
   }
 });
