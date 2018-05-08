@@ -39,7 +39,14 @@ export default class Todo extends React.Component {
             />
           </View>
         </TouchableOpacity>
-        <Text style={styles.text}>Todo</Text>
+        <Text
+          style={[
+            styles.text,
+            isCompleted ? styles.completedText : styles.uncompletedText
+          ]}
+        >
+          Todo
+        </Text>
       </View>
     );
   }
@@ -58,6 +65,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     marginVertical: 20
   },
+  completedText: {
+    color: "#bbb",
+    textDecorationLine: "line-through"
+  },
+  uncompletedText: {
+    color: "#353839"
+  },
   circle: {
     width: 30,
     height: 30,
@@ -70,10 +84,10 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   completedCircle: {
-    backgroundColor: "#fff"
+    backgroundColor: "#f23657"
   },
   uncompletedCirecle: {
-    backgroundColor: "#f23657"
+    backgroundColor: "#fff"
   },
   insideCircle: {
     width: 20,
