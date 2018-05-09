@@ -7,7 +7,8 @@ import {
   TextInput,
   Dimensions,
   Platform,
-  ScrollView
+  ScrollView,
+  AsyncStorage
 } from "react-native";
 import { AppLoading } from "expo";
 import uuidv1 from "uuid/v1";
@@ -31,8 +32,13 @@ export default class App extends React.Component {
     this.setState({ newTodo: text });
   };
 
-  _loadTodos = () => {
-    this.setState({ loadedTodos: true });
+  _loadTodos = async () => {
+    try {
+      const todos = JSON.parse(await AsyncStorage.getItem("todos"));
+      this.setState({ loadedTodos: true, todos });
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   _addTodo = () => {
@@ -56,6 +62,7 @@ export default class App extends React.Component {
           },
           newTodo: ""
         };
+        this._saveTodos(newState.todos);
         return { ...newState };
       });
     } else {
@@ -70,6 +77,7 @@ export default class App extends React.Component {
         ...prevState,
         ...todos
       };
+      this._saveTodos(newState.todos);
       return { ...newState };
     });
   };
@@ -86,6 +94,7 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveTodos(newState.todos);
       return { ...newState };
     });
   };
@@ -102,8 +111,20 @@ export default class App extends React.Component {
           }
         }
       };
+      this._saveTodos(newState.todos);
       return { ...newState };
     });
+  };
+
+  _saveTodos = async newTodos => {
+    try {
+      const saveTodos = await AsyncStorage.setItem(
+        "todos",
+        JSON.stringify(newTodos)
+      );
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   render() {
@@ -137,15 +158,17 @@ export default class App extends React.Component {
             onSubmitEditing={_addTodo}
           />
           <ScrollView contentContainerStyle={styles.todos}>
-            {Object.values(todos).map(todo => (
-              <Todo
-                key={todo.id}
-                {...todo}
-                deleteTodo={_deleteTodo}
-                toggleCompleteTodo={_toggleCompleteTodo}
-                updateTodo={_updateTodo}
-              />
-            ))}
+            {Object.values(todos)
+              .reverse()
+              .map(todo => (
+                <Todo
+                  key={todo.id}
+                  {...todo}
+                  deleteTodo={_deleteTodo}
+                  toggleCompleteTodo={_toggleCompleteTodo}
+                  updateTodo={_updateTodo}
+                />
+              ))}
           </ScrollView>
         </View>
       </View>
