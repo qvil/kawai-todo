@@ -93,18 +93,21 @@ export default class Todo extends React.Component {
     todoValue: ""
   };
 
-  _toggleComplete = () => {
+  _toggleComplete = event => {
+    event.stopPropagation();
     const { id, isCompleted, toggleCompleteTodo } = this.props;
 
     toggleCompleteTodo(!isCompleted)(id);
   };
 
-  _startEditing = () => {
+  _startEditing = event => {
+    event.stopPropagation();
     const { text } = this.props;
     this.setState({ isEditing: true, todoValue: text });
   };
 
-  _finishEditing = () => {
+  _finishEditing = event => {
+    event.stopPropagation();
     const { id, updateTodo } = this.props;
     const { todoValue } = this.state;
 
@@ -128,7 +131,10 @@ export default class Todo extends React.Component {
     const rightButtons = [
       <TouchableOpacity
         style={styles.swipeButtons}
-        onPressOut={() => deleteTodo(id)}
+        onPressOut={event => {
+          event.stopPropagation();
+          deleteTodo(id);
+        }}
       >
         <MaterialIcons
           style={styles.deleteButton}
