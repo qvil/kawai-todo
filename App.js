@@ -156,6 +156,7 @@ export default class App extends React.Component {
             returnKeyType={"done"}
             autoCorrect={false}
             onSubmitEditing={_addTodo}
+            underlineColorAndroid={"transparent"}
           />
           <ScrollView contentContainerStyle={styles.todos}>
             {Object.values(todos)

@@ -2,21 +2,20 @@
 
 Kawai To Do App made with React Native (Thanks to Nicolás)
 
-<!-- ## Demo
+## Demo
 
-![demo.png](demo.png) -->
+![demo.gif](demo.gif)
 
-<!-- ## Install
+## Install & Start
 
-```
-npm install
-```
+* Demo : https://expo.io/@qvil/kawai-todo
+* Download : https://www.dropbox.com/s/oneaipyrl97cyuv/kawai-todo-4b8f9db9-534b-11e8-8146-0a580a7820c7-signed.apk?dl=0
 
-## Start
+### Demo QR Code
 
-```
-npm start
-``` -->
+![qrcode.png](qrcode.png)
+
+Scan this QR code with your Expo mobile app to load the project immediately.
 
 ## Reference
 
