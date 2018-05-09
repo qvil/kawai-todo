@@ -34,7 +34,7 @@ export default class App extends React.Component {
 
   _loadTodos = async () => {
     try {
-      const todos = JSON.parse(await AsyncStorage.getItem("todos"));
+      const todos = JSON.parse(await AsyncStorage.getItem("todos")) || {};
       this.setState({ loadedTodos: true, todos });
     } catch (error) {
       console.error(error);
