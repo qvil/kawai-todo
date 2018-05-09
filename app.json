@@ -19,7 +19,8 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "io.github.qvil"
     },
     "android": {
       "package": "io.github.qvil"
